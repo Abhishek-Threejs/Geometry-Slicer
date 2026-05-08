@@ -30,9 +30,7 @@ let mode: ToolMode = "navigate";
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-let pieces = shapeManager.scenePieces;
 const setPieces = (next: THREE.Mesh[]) => {
-  pieces = next;
   shapeManager.scenePieces.length = 0;
   shapeManager.scenePieces.push(...next);
 };
@@ -40,7 +38,7 @@ const setPieces = (next: THREE.Mesh[]) => {
 const cutManager = new CutManager(
   scene,
   camera,
-  () => pieces,
+  () => shapeManager.scenePieces,
   setPieces,
   () => shapeManager.activeMesh,
   (m) => {
@@ -82,7 +80,7 @@ ui.gltfInput.addEventListener("change", () => {
 window.addEventListener("pointerdown", (event) => {
   const hits = getPointerHits({
     event,
-    targets: pieces,
+    targets: shapeManager.scenePieces,
     mouse,
     raycaster,
     camera,
