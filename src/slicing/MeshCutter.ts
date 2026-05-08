@@ -255,14 +255,14 @@ export class MeshCutter {
       }
     }
 
-    const planeNormal = plane.normal.clone().normalize();
-    const capFront = makeCap(cutPoints, planeNormal);
-    const capBack = makeCap(cutPoints, planeNormal.clone().negate());
+    // const planeNormal = plane.normal.clone().normalize();
+    // const capFront = makeCap(cutPoints, planeNormal);
+    // const capBack = makeCap(cutPoints, planeNormal.clone().negate());
 
-    frontPositions.push(...capFront.positions);
-    frontNormals.push(...capFront.normals);
-    backPositions.push(...capBack.positions);
-    backNormals.push(...capBack.normals);
+    // frontPositions.push(...capFront.positions);
+    // frontNormals.push(...capFront.normals);
+    // backPositions.push(...capBack.positions);
+    // backNormals.push(...capBack.normals);
 
     const frontGeo = createGeometryFromBuffers(
       frontPositions,
