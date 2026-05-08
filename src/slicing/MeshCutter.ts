@@ -106,55 +106,6 @@ function createGeometryFromBuffers(
   return geometry;
 }
 
-function makeCap(points: THREE.Vector3[], planeNormal: THREE.Vector3) {
-  const unique: THREE.Vector3[] = [];
-  for (const p of points) {
-    const exists = unique.some((q) => q.distanceToSquared(p) < 1e-6);
-    if (!exists) unique.push(p.clone());
-  }
-
-  if (unique.length < 3) {
-    return { positions: [] as number[], normals: [] as number[] };
-  }
-
-  const center = new THREE.Vector3();
-  for (const p of unique) center.add(p);
-  center.multiplyScalar(1 / unique.length);
-
-  let tangent = new THREE.Vector3(1, 0, 0).cross(planeNormal);
-  if (tangent.lengthSq() < EPS) {
-    tangent = new THREE.Vector3(0, 1, 0).cross(planeNormal);
-  }
-  tangent.normalize();
-
-  const bitangent = new THREE.Vector3()
-    .crossVectors(planeNormal, tangent)
-    .normalize();
-
-  const ordered = unique
-    .map((p) => {
-      const rel = p.clone().sub(center);
-      const x = rel.dot(tangent);
-      const y = rel.dot(bitangent);
-      return { p, angle: Math.atan2(y, x) };
-    })
-    .sort((a, b) => a.angle - b.angle)
-    .map((v) => v.p);
-
-  const positions: number[] = [];
-  const normals: number[] = [];
-  const n = planeNormal.clone().normalize();
-
-  for (let i = 1; i < ordered.length - 1; i += 1) {
-    const a = ordered[0];
-    const b = ordered[i];
-    const c = ordered[i + 1];
-    positions.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
-    normals.push(n.x, n.y, n.z, n.x, n.y, n.z, n.x, n.y, n.z);
-  }
-
-  return { positions, normals };
-}
 
 export class MeshCutter {
   sliceMeshByPlane(mesh: THREE.Mesh, plane: THREE.Plane): SliceResult {
@@ -254,15 +205,6 @@ export class MeshCutter {
         }
       }
     }
-
-    // const planeNormal = plane.normal.clone().normalize();
-    // const capFront = makeCap(cutPoints, planeNormal);
-    // const capBack = makeCap(cutPoints, planeNormal.clone().negate());
-
-    // frontPositions.push(...capFront.positions);
-    // frontNormals.push(...capFront.normals);
-    // backPositions.push(...capBack.positions);
-    // backNormals.push(...capBack.normals);
 
     const frontGeo = createGeometryFromBuffers(
       frontPositions,
