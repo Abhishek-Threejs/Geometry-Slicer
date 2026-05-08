@@ -87,9 +87,7 @@ export function computeCutPlane(args: {
   }
   normal.normalize();
 
-  const center = computeMeshCenter(args.mesh);
-  const midpoint = args.start.clone().add(args.end).multiplyScalar(0.5);
-  const coplanarPoint = center.clone().lerp(midpoint, 0.35);
+  const coplanarPoint = args.start.clone().add(args.end).multiplyScalar(0.5);
 
   const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(
     normal,
