@@ -96,11 +96,11 @@ export class ShapeManager {
           const geometry = original.geometry.clone();
           geometry.applyMatrix4(original.matrixWorld);
 
-          const mesh = new THREE.Mesh(geometry, this.baseMaterial.clone());
-          mesh.position.set(0, 0, 0);
-          setupPieceMesh(mesh);
-          this.scene.add(mesh);
-          this.scenePieces.push(mesh);
+          // const mesh = new THREE.Mesh(geometry, this.baseMaterial.clone());
+          original.position.set(0, 0, 0);
+          setupPieceMesh(original);
+          this.scene.add(original);
+          this.scenePieces.push(original);
         }
 
         this.activeMesh = this.scenePieces[0] ?? null;
